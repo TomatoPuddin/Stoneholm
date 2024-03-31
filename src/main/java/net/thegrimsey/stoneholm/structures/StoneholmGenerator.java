@@ -142,16 +142,16 @@ public class StoneholmGenerator {
 
             // For every structure block in the piece.
             for (StructureTemplate.StructureBlockInfo structureBlock : structurePoolElement.getStructureBlockInfos(this.structureManager, sourcePos, sourceRotation, this.random)) {
-                if(sourceBlock.equals(structureBlock.pos))
+                if(sourceBlock.equals(structureBlock.pos()))
                     continue;
 
                 MutableObject<VoxelShape> structureShape;
-                Direction structureBlockFaceDirection = JigsawBlock.getFacing(structureBlock.state);
-                BlockPos structureBlockPosition = structureBlock.pos;
+                Direction structureBlockFaceDirection = JigsawBlock.getFacing(structureBlock.state());
+                BlockPos structureBlockPosition = structureBlock.pos();
                 BlockPos structureBlockAimPosition = structureBlockPosition.offset(structureBlockFaceDirection);
 
                 // Get pool that structure block is targeting.
-                Identifier structureBlockTargetPoolId = new Identifier(structureBlock.nbt.getString("pool"));
+                Identifier structureBlockTargetPoolId = new Identifier(structureBlock.nbt().getString("pool"));
                 Optional<StructurePool> targetPool = this.registry.getOrEmpty(structureBlockTargetPoolId);
                 if (targetPool.isEmpty() || targetPool.get().getElementCount() == 0 && !Objects.equals(structureBlockTargetPoolId, StructurePools.EMPTY.getValue())) {
                     LOGGER.warn("Empty or non-existent pool: {}", structureBlockTargetPoolId);
@@ -213,12 +213,12 @@ public class StoneholmGenerator {
                     if (!JigsawBlock.attachmentMatches(structureBlock, structureBlockInfo))
                         continue;
 
-                    BlockPos structureBlockPos = structureBlockInfo.pos;
+                    BlockPos structureBlockPos = structureBlockInfo.pos();
                     BlockPos structureBlockAimDelta = structureBlockAimPosition.subtract(structureBlockPos);
                     BlockBox iteratedStructureBoundingBox = element.getBoundingBox(this.structureManager, structureBlockAimDelta, randomizedRotation);
 
                     int structureBlockY = structureBlockPos.getY();
-                    int o = j - structureBlockY + JigsawBlock.getFacing(structureBlock.state).getOffsetY();
+                    int o = j - structureBlockY + JigsawBlock.getFacing(structureBlock.state()).getOffsetY();
                     int adjustedMinY = boundsMinY + o;
                     int pieceYOffset = adjustedMinY - iteratedStructureBoundingBox.getMinY();
                     BlockBox offsetBoundingBox = iteratedStructureBoundingBox.offset(0, pieceYOffset, 0);
@@ -294,12 +294,12 @@ public class StoneholmGenerator {
                     if (JigsawBlock.attachmentMatches(structureBlock, structureBlockInfo))
                         continue;
 
-                    BlockPos structureBlockPos = structureBlockInfo.pos;
+                    BlockPos structureBlockPos = structureBlockInfo.pos();
                     BlockPos structureBlockAimDelta = structureBlockAimPosition.subtract(structureBlockPos);
                     BlockBox iteratedStructureBoundingBox = element.getBoundingBox(this.structureManager, structureBlockAimDelta, randomizedRotation);
 
                     int structureBlockY = structureBlockPos.getY();
-                    int o = j - structureBlockY + JigsawBlock.getFacing(structureBlock.state).getOffsetY();
+                    int o = j - structureBlockY + JigsawBlock.getFacing(structureBlock.state()).getOffsetY();
                     int adjustedMinY = boundsMinY + o;
                     int pieceYOffset = adjustedMinY - iteratedStructureBoundingBox.getMinY();
                     BlockBox offsetBoundingBox = iteratedStructureBoundingBox.offset(0, pieceYOffset, 0);
